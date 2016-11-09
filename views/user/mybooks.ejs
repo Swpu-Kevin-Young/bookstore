@@ -1,0 +1,34 @@
+<div class="panel panel-default private-book-list">
+    <div class="panel-heading">所有书籍</div>
+    <div class="panel-body">
+        <% if(books) { %>
+            <% books.forEach(function(book) { %>
+                <div class="col-md-4">
+                    <a href="/book/<%- book._id %>/prefile" style="text-decoration: none;">
+                        <div class="thumbnail">
+                            
+                            <img src="/<%= book.coverImg %>" alt="<%- book.caption %>"/>
+                          
+                            <h4 class="book-caption">《<%- book.caption %>》</h4>
+                            <p class="book-description"><%- book.description || '无简介' %></p>
+                            <div class="btn-group btn-group-justified">
+                            <div class="btn-group">
+                            <form class="delete" action="/book/<%- book._id %>">
+                            <button type="submit" class="btn btn-danger">删除</button>
+                            </form>
+                            </div>
+                            <div class="btn-group">
+                            <form action="/book/<%- book._id %>/addchapter.html">
+                            <button class="btn btn-primary">添加章节</button>
+                            </form>
+                            </div>   
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <p class="lead text-center">你暂未发布任何书籍</p>
+        <% } %>
+    </div>
+</div>

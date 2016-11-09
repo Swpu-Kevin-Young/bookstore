@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head lang="en">
+    <% include head.ejs %>
+</head>    
+<body>
+
+    <% include navbar.ejs %>
+
+    <div class="container" style="margin-top: 86px">
+
+        <div class="row">
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading">全部书籍</div>
+                    <div class="panel-body" style="padding: 0">
+                        <% if(books) { %>
+                            <% books.forEach(function(book) { %>
+                            <a data-author="<%- book.authorId %>" class="text-center book book-item" href="/book/<%- book._id %>/prefile">
+                                    <div class="col-sm-1 book-avatar"></div>
+                                    <div class="col-sm-2 book-caption"><%- book.caption %></div>
+                                    <div class="col-sm-1">
+                                        <span class="btn btn-sm btn-success"><%- book.type %></span>
+                                    </div>
+                                    <div class="col-sm-6 book-description hidden-xs"><%- book.description||'无简介' %></div>
+                                    <div class="col-sm-2 book-time"><%- formatTime(book.time.create) %></div>
+                            </a>
+                            <hr />
+                            <% }) %>
+                        <% } else { %>
+                            <div class="row text-center lead">暂无此类型书籍</div>
+                        <% } %>
+                    </div>
+                    <% if (count > 0) { %>
+                    <div class="panel-footer">
+                        <ul class="pagination">
+                            <li>
+                                <a href="/"><span aria-hidden="true">&laquo;</span></a>
+                            </li>
+                            <% for(var i = 1; i <= count; i++) { %>
+                                <li>
+                                    <a href="/page/<%= i %>"><%= i %></a>
+                                </li>
+                            <% } %>
+                            <li>
+                                <a href="/page/<%= count %>"><span aria-hidden="true">&raquo;</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">最近更新</div>
+                    <div class="panel-body">
+                        <% if(recent) { %>
+                            <% recent.forEach(function(book) { %>
+                            <a class="book" href="/book/<%- book._id %>/prefile" title="<%- book.caption %>">
+                                <div class="col-sm-5 text-left book-caption"><%- book.caption %></div>
+                                <div class="col-sm-7 text-right book-time"><%- formatTime(book.time.update) %></div>
+                                
+                            </a>
+                            <hr />
+                            <% }) %>
+                        <% } else { %>
+                            <div class="row text-center lead">暂无书籍更新</div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+    $(function() {
+        function tpl (obj) {
+            var str = '<a href="/user/' + obj._id +'/books"><img class="img-responsive" src="/' + obj.avatar + '" alt="' + obj.name + '" title="作者: ' + obj.name + '"></a>'
+            return str
+        }
+
+        $(".book-item").each(function(ind, elem) {
+            $.get("/user/" + $(elem).data("author"), function(data) {
+                var img = tpl(data)
+                $(elem).find(".book-avatar").append(img)
+            })
+        })
+        
+        $(".book-avatar").on("click", "a", function(e){
+            e.stopPropagation()
+        })
+    })
+        
+    </script>
+</body>
+
+</html>

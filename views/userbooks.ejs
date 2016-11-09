@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head lang="en">
+    <% include head.ejs %>
+</head>
+<body>
+
+    <% include navbar.ejs %>
+
+    <div class="container personal-book-list">
+        <div class="panel panel-default">
+            <div class="panel-heading avatar">
+                <span class="text-primary lead"><%= author.name %></span> 的所有书籍
+                <img src="/<%- author.avatar %>" />
+            </div>
+            <div class="panel-body">
+                <% if(books) { %>
+                    <% books.forEach(function(book) { %>
+                        <div class="col-md-3 col-sm-6">
+                            <a href="/book/<%- book._id %>/prefile" style="text-decoration: none;">
+                                <div class="thumbnail">
+                                    <img class="book-coverImg" src="/<%= book.coverImg %>" alt="<%- book.caption %>"/>
+                                   
+                                    <h3>《<span class="book-caption"><%- book.caption %></span>》</h3>
+                                    <p class="book-description"><%- book.description || '无简介' %></p>
+                                </div>
+                            </a>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p class="lead text-center">用户暂未发布任何书籍</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
